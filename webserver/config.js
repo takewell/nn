@@ -11,7 +11,8 @@ const config = {
     acquire: 30000,
     idle: 10000
   },
-  SECRET: 'steS6av@*uya'
+  SECRET: 'steS6av@*uya',
+  BCRYPT_ROUNDS: 15
 };
 
 module.exports = config;
