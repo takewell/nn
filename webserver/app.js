@@ -4,6 +4,11 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var helmet = require('helmet');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+var config = require('./config');
 
 var User = require('./models/user');
 var Video = require('./models/video');
@@ -24,9 +29,44 @@ User.sync().then(() => {
 });
 
 var index = require('./routes/index');
+var login = require('./routes/login');
+var logout = require('./routes/logout');
 var users = require('./routes/users');
 
 var app = express();
+app.use(helmet());
+
+passport.use(
+  new LocalStrategy(
+    { usernameField: 'email', passwordField: 'password' },
+    (email, password, done) => {
+      if (email === 'takewell.dev@gmail.com' && password == 'test') {
+        done(null, { email, password });
+      } else {
+        done(null, false, { message: 'パスワードが違います' });
+      }
+    }
+  )
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+app.use(
+  session({
+    secret: config.SECRET,
+    resave: false,
+    saveUninitialized: false
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -41,7 +81,18 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/login', login);
+app.use('/logout', logout);
 app.use('/users', users);
+
+app.post(
+  '/login',
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/login',
+    failureFlash: false
+  })
+);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

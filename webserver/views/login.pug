@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h1 ログイン
+  form(action="/login" method="POST")
+    h3 Eメールアドレス: 
+      input(type="text" name="email" placeholder="Eメールアドレス")
+    h3 パスワード: 
+      input(type="password" name="password" placeholder="パスワード")
+    input(type="submit" name="submit" value="送信")

@@ -10,7 +10,8 @@ const config = {
     min: 0,
     acquire: 30000,
     idle: 10000
-  }
+  },
+  SECRET: 'steS6av@*uya'
 };
 
 module.exports = config;
