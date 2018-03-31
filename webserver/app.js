@@ -9,6 +9,7 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var config = require('./config');
+var passwordDigestClient = require('./lib/passwordDigestClient');
 
 var User = require('./models/user');
 var Video = require('./models/video');
@@ -40,11 +41,16 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
     (email, password, done) => {
-      if (email === 'takewell.dev@gmail.com' && password == 'test') {
-        done(null, { email, password });
-      } else {
-        done(null, false, { message: 'パスワードが違います' });
-      }
+      passwordDigestClient.verify(
+        password,
+        '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O'
+      ).then(isCorrect => {
+        if (email === 'takewell.dev@gmail.com' && isCorrect) {
+          done(null, { email, password });
+        } else {
+          done(null, false, { message: 'パスワードが違います' });
+        }
+      });
     }
   )
 );
