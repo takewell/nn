@@ -41,14 +41,24 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
     (email, password, done) => {
-      passwordDigestClient.verify(
-        password,
-        '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O'
-      ).then(isCorrect => {
-        if (email === 'takewell.dev@gmail.com' && isCorrect) {
-          done(null, { email, password });
+      User.findOne({
+        where: {
+          email: email
+        }
+      }).then(user => {
+        if (!user) {
+          done(null, false, { message: '登録されたメールアドレスではありません' });
         } else {
-          done(null, false, { message: 'パスワードが違います' });
+          passwordDigestClient.verify(
+            password,
+            '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O'
+          ).then(isCorrect => {
+            if (email === 'takewell.dev@gmail.com' && isCorrect) {
+              done(null, { email, password });
+            } else {
+              done(null, false, { message: 'パスワードが違います' });
+            }
+          });
         }
       });
     }
