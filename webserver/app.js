@@ -6,6 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var helmet = require('helmet');
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var config = require('./config');
@@ -56,10 +57,24 @@ passport.use(
   )
 );
 
-passport.serializeUser((user, done) => done(null, user));
+passport.serializeUser(async (user, done) => {
+  try {
+    const storedUser = await User.findOne({ where: { email: user.email } });
+    user.userId = storedUser.userId;
+    user.userName = storedUser.username;
+    user.isEmailVerified = storedUser.isEmailVerified;
+    user.isAdmin = storedUser.isAdmin;
+    delete user.password;
+    done(null, user);
+  } catch (err) { throw err; }
+});
 passport.deserializeUser((user, done) => done(null, user));
 
 app.use(session({
+  store: new RedisStore({
+    host: config.REDIS_HOST,
+    port: config.REDIS_PORT
+  }),
   secret: config.SECRET,
   resave: false,
   saveUninitialized: false
