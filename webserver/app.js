@@ -1,23 +1,22 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var helmet = require('helmet');
-var session = require('express-session');
-var RedisStore = require('connect-redis')(session);
-var passport = require('passport');
-var LocalStrategy = require('passport-local').Strategy;
-var config = require('./config');
-var passwordDigestClient = require('./lib/passwordDigestClient');
-
-var User = require('./models/user');
-var Video = require('./models/video');
-var Comment = require('./models/comment');
-var Mylistitem = require('./models/mylistitem');
-var VideoStatistic = require('./models/videostatistic');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const session = require('express-session');
+const RedisStore = require('connect-redis')(session);
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const config = require('./config');
 const strategy = require('./lib/strategy');
+
+const User = require('./models/user');
+const Video = require('./models/video');
+const Comment = require('./models/comment');
+const Mylistitem = require('./models/mylistitem');
+const VideoStatistic = require('./models/videostatistic');
 
 User.sync().then(() => {
   Video.belongsTo(User, { foreignKey: 'userId' });
@@ -31,12 +30,12 @@ User.sync().then(() => {
   Mylistitem.sync();
 });
 
-var index = require('./routes/index');
-var login = require('./routes/login');
-var logout = require('./routes/logout');
-var users = require('./routes/users');
+const index = require('./routes/index');
+const login = require('./routes/login');
+const logout = require('./routes/logout');
+const users = require('./routes/users');
 
-var app = express();
+const app = express();
 app.use(helmet());
 
 passport.use(strategy.getLocalStrategy());
