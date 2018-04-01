@@ -17,6 +17,7 @@ var Video = require('./models/video');
 var Comment = require('./models/comment');
 var Mylistitem = require('./models/mylistitem');
 var VideoStatistic = require('./models/videostatistic');
+const strategy = require('./lib/strategy');
 
 User.sync().then(() => {
   Video.belongsTo(User, { foreignKey: 'userId' });
@@ -38,24 +39,7 @@ var users = require('./routes/users');
 var app = express();
 app.use(helmet());
 
-passport.use(
-  new LocalStrategy(
-    { usernameField: 'email', passwordField: 'password' },
-    async (email, password, done) => {
-      try {
-        const user = await User.findOne({ where: { email: email } });
-        if (!user) done(null, false, { message: '登録されたメールアドレスではありません' });
-        else {
-          const isCorrect = await passwordDigestClient.verify(password, '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O');
-          if (email === 'takewell.dev@gmail.com' && isCorrect) done(null, { email, password });
-          else done(null, false, { message: 'パスワードが違います' });
-        }
-      } catch (err) {
-        throw err;
-      }
-    }
-  )
-);
+passport.use(strategy.getLocalStrategy());
 
 passport.serializeUser(async (user, done) => {
   try {
