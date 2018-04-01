@@ -40,46 +40,30 @@ app.use(helmet());
 passport.use(
   new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
-    (email, password, done) => {
-      User.findOne({
-        where: {
-          email: email
+    async (email, password, done) => {
+      try {
+        const user = await User.findOne({ where: { email: email } });
+        if (!user) done(null, false, { message: '登録されたメールアドレスではありません' });
+        else {
+          const isCorrect = await passwordDigestClient.verify(password, '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O');
+          if (email === 'takewell.dev@gmail.com' && isCorrect) done(null, { email, password });
+          else done(null, false, { message: 'パスワードが違います' });
         }
-      }).then(user => {
-        if (!user) {
-          done(null, false, { message: '登録されたメールアドレスではありません' });
-        } else {
-          passwordDigestClient.verify(
-            password,
-            '$2a$15$zpLyTVbAIYURo5v/W2IWy.nasRQ/IDQCLKH/iDHHe8N5xUynbT33O'
-          ).then(isCorrect => {
-            if (email === 'takewell.dev@gmail.com' && isCorrect) {
-              done(null, { email, password });
-            } else {
-              done(null, false, { message: 'パスワードが違います' });
-            }
-          });
-        }
-      });
+      } catch (err) {
+        throw err;
+      }
     }
   )
 );
 
-passport.serializeUser((user, done) => {
-  done(null, user);
-});
+passport.serializeUser((user, done) => done(null, user));
+passport.deserializeUser((user, done) => done(null, user));
 
-passport.deserializeUser((user, done) => {
-  done(null, user);
-});
-
-app.use(
-  session({
-    secret: config.SECRET,
-    resave: false,
-    saveUninitialized: false
-  })
-);
+app.use(session({
+  secret: config.SECRET,
+  resave: false,
+  saveUninitialized: false
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
