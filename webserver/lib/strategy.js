@@ -1,6 +1,6 @@
 const LocalStrategy = require('passport-local').Strategy;
 const User = require('../models/user');
-const config = require('../config');
+// const config = require('../config');
 const passwordDigestClient = require('./passwordDigestClient');
 
 const getLocalStrategy = () => {
@@ -23,15 +23,15 @@ const getLocalStrategy = () => {
 };
 
 const getFacebookStrategy = () => {
-
+  return {};
 };
 
 const getTwitterStrategy = () => {
-
+  return {};
 };
 
 const getGoogleStrategy = () => {
-
+  return {};
 };
 
 module.exports = {
