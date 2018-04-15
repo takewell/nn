@@ -9,5 +9,8 @@ html
         h3= user.email
         a(href='/logout') ログアウト
       else
-        a(href='/login') ログイン
+        div
+          a(href='/login') ログイン
+        div
+          a(href='/signup') サインアップ
     block content
