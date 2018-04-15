@@ -33,7 +33,7 @@ User.sync().then(() => {
 const index = require('./routes/index');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
-const users = require('./routes/users');
+const signup = require('./routes/signup');
 
 const app = express();
 app.use(helmet());
@@ -81,7 +81,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/login', login);
 app.use('/logout', logout);
-app.use('/users', users);
+app.use('/signup', signup);
 
 app.post(
   '/login',
