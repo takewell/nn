@@ -1,0 +1,7 @@
+extends ../layout
+
+block content
+  if !email
+    h1 メールアドレスを確認できませんでした
+  else
+    h1 #{email} のメールアドレスが確認されました
