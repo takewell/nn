@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  h1 サインアップ
+  if errorMessage
+    h2= errorMessage
+  form(action="/signup" method="POST")
+    h3 Eメールアドレス
+    input(type="text" name="email" placeholder="Eメールアドレス")
+    h3 パスワード
+    input(type="password" name="password" placeholder="パスワード")
+    h3 パスワードの再入力
+    input(type="password" name="repassword" placeholder="パスワード")
+    div
+      input(type="submit" name="submit" value="サインアップ")
