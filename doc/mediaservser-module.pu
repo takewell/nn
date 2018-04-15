@@ -1,0 +1,34 @@
+@startuml MediaServer-modules
+left to right direction
+
+namespace MediaServer {
+
+  package "controllers" {
+    class VideosController
+  }
+
+  package "domain" {
+    package "entity" {
+      class Video
+      class VideoStatus
+    }
+
+    package "repository" {
+      class VideoRepository<<Repository>>
+    }
+  }
+
+  package "infrastructure" {
+
+    package "actor" {
+      class VideoEncoder
+      class VideoEncoderWorker
+    }
+
+    package "repository (infra)" {
+      class VideoRepositoryImpl<<Repository>>
+    }
+  }
+}
+
+@enduml

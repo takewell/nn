@@ -1,0 +1,40 @@
+@startuml layer
+' left to right direction
+
+actor 投稿者
+actor 閲覧者
+
+frame クライアントサイド {
+  folder Webブラウザ
+  folder スマートフォン
+}
+
+frame サーバーサイド {
+  folder Express.js
+  folder PlayFramework
+  database FileSystem
+
+  database Docker_MySQL
+  database Docker_Redis
+
+  folder Docker_ffmpeg
+  folder Docker_mp4box
+}
+note right : プロダクション環境リリースの際には\nファイアウォール、\nnginxによるSSL証明書の登録と\nリバースプロキシ設定が必須となる。\nまたExpress.jsとPlayFrameworkの\nインスタンス数は負荷に応じて\n増減することができる。
+
+
+投稿者 -- クライアントサイド
+閲覧者 -- クライアントサイド
+
+クライアントサイド -- PlayFramework
+クライアントサイド -- Express.js
+
+PlayFramework -- Docker_ffmpeg
+PlayFramework -- Docker_mp4box
+PlayFramework -- FileSystem
+PlayFramework -- Docker_MySQL
+
+Express.js -- Docker_MySQL
+Express.js -- Docker_Redis
+
+@enduml

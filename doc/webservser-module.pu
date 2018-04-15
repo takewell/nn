@@ -1,0 +1,44 @@
+@startuml webservser-modules
+left to right direction
+
+namespace WebServer {
+
+  namespace models {
+    class user
+    class video
+    class videoStat
+    class comment
+    class mylistItem
+  }
+
+  namespace routes {
+    class index
+    class watch
+    class signup
+    class login
+    class logout
+    class settings
+    class upload
+
+    namespace my {
+      class videos
+      class mylist
+    }
+
+    namespace api {
+
+      namespace videos {
+        class videostat
+        class comments
+      }
+
+      namespace my {
+        class videos
+        class mylist
+      }
+
+    }
+  }
+}
+
+@enduml

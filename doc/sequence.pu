@@ -1,0 +1,56 @@
+@startuml sequence
+
+actor 認証ユーザー
+participant Webブラウザ
+participant WebServer
+database MySQL
+database Redis
+
+participant MediaServer
+participant "FFmpeg+MP4Box"
+database FileSystem
+
+認証ユーザー -> Webブラウザ : ログインした状態で利用
+Webブラウザ -> WebServer : 動画投稿ページをリクエスト
+WebServer -> Redis : セッション情報を検証
+WebServer --> Webブラウザ : 動画投稿ページを表示、JWT取得認証ユーザー -> Webブラウザ : 動画ファイルを投稿
+Webブラウザ -> MediaServer : 動画ファイルを送信
+MediaServer ->> FileSystem : 動画ファイルを保存
+Webブラウザ <-- MediaServer : 動画ファイルの動画IDを発行
+MediaServer ->> MySQL : 動画の変換ステータスを挿入
+MediaServer ->> "FFmpeg+MP4Box" : 動画のMPEG-DASH変換を開始
+"FFmpeg+MP4Box" ->> FileSystem : 変換後のmpd, mp4ファイルを保存
+MediaServer ->> MySQL : 動画の変換ステータスを更新
+
+loop 変換終了またはタイムアウトまでループ
+  MediaServer ->> "FFmpeg+MP4Box" : 変換状況を取得
+  MediaServer ->> MySQL : 動画の変換ステータスを更新
+end
+
+Webブラウザ -> WebServer : 動画ファイル送信完了を通知
+WebServer --> Webブラウザ : 変換ステータスページを表示、JWT取得
+Webブラウザ ->> WebServer : 変換ステータスを取得 (5秒ポーリング)
+WebServer -> MySQL : 動画変換ステータスを取得
+WebServer --> Webブラウザ : 動画変換ステータスを送信
+Webブラウザ -> WebServer : タイトル・説明文・公開設定ページをリクエスト
+WebServer --> Webブラウザ : タイトル・説明文・公開設定ページを表示
+Webブラウザ -> WebServer : タイトル・説明文・公開設定を投稿
+WebServer -> MySQL : 動画の情報を保存
+WebServer --> Webブラウザ : 視聴ページを表示
+
+認証ユーザー -> Webブラウザ : 動画をコメントと一緒に視聴しようとする
+Webブラウザ -> WebServer : 視聴ページをリクエスト
+WebServer -> MySQL: 動画情報を取得
+WebServer --> Webブラウザ : 視聴ページを表示、JWT取得
+Webブラウザ ->> MediaServer : mpd, mp4ファイルをリクエスト
+MediaServer --> Webブラウザ : mpd, mp4ファイルを送信
+Webブラウザ ->> WebServer : コメントをリクエスト
+WebServer -> MySQL : 動画のコメント情報を取得
+WebServer --> Webブラウザ : 動画のコメント情報を送信
+
+認証ユーザー -> Webブラウザ : 動画にコメントをしようとする
+Webブラウザ -> WebServer : コメントを投稿する
+WebServer -> MySQL : コメントが保存される
+WebServer --> Webブラウザ : コメント投稿の結果が結果が送信される
+
+@enduml

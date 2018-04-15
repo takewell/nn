@@ -1,0 +1,23 @@
+@startuml signup-sequence
+
+actor ユーザー
+participant Webブラウザ
+participant WebServer
+participant メール送信サービス
+database MySQL
+database Redis
+
+ユーザー -> Webブラウザ : ログインしてない状態での利用
+Webブラウザ -> WebServer : サインアップページをリクエスト
+WebServer --> Webブラウザ : サインアップページを表示
+Webブラウザ -> WebServer : メールアドレスとパスワードを投稿
+WebServer -> MySQL : メールアドレスとパスワードでアカウントを作成
+WebServer ->> メール送信サービス : JWTトークンと共にメールを送信
+WebServer -> Redis : セッション情報の保存
+WebServer -> Webブラウザ : ログイン後の認証状態のページを表示
+ユーザー -> Webブラウザ : メールに送られてきたURLをクリック
+Webブラウザ -> WebServer : URLのクエリを使ってJWTを投稿
+WebServer -> MySQL : 対象ユーザーをメール認証済みに
+WebServer --> Webブラウザ : メール確認済みページを表示
+
+@enduml
