@@ -3,6 +3,9 @@ const router = express.Router();
 const User = require('../models/user');
 const passwordDigestClient = require('../lib/passwordDigestClient');
 const mailSender = require('./mailSender');
+const config = require('../config');
+const jwt = require('jsonwebtoken');
+
 router.get('/', (req, res, next) => {
   res.render('signup/index.pug', {
     user: req.user
@@ -48,6 +51,28 @@ router.post('/', (req, res, next) => {
           });
         }
       });
+  }
+});
+
+router.get('/emailverify', async (req, res, next) => {
+  const token = req.query.token;
+  if (token) {
+    let decoded = null;
+    try {
+      decoded = jwt.verify(token, config.SECRET);
+    } catch (err) {
+      res.render('signup/emailverify.png', { user: req.user });
+      return;
+    }
+
+    const email = decoded.email;
+    await User.update({ isEmailVerified: true }, { where: { email: email } }).catch(e => {
+      console.error(e);
+      res.render('signup/emailverify.pug', { user: req.user });
+    });
+    res.render('signup/emailverify.pug', { email: email, user: req.user });
+  } else {
+    res.render('signup/emailverify.pug', { user: req.user });
   }
 });
 
