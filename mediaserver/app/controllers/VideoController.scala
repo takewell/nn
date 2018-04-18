@@ -1,22 +1,26 @@
 package controllers
 
 import java.nio.file.{FileSystems, Files, StandardCopyOption}
+import java.time.{Clock, LocalDateTime}
 import java.util.UUID
 import javax.inject._
 
+import domain.entity.{Video, VideoStatus}
+import domain.repository.VideoRepository
 import play.api.Configuration
 import play.api.mvc._
 import play.api.libs.json.Json
 import play.Logger
-
-
 import pdi.jwt.{Jwt, JwtAlgorithm}
 
 import scala.util.Success
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 @Singleton
 class VideosController @Inject()(cc: ControllerComponents,
+                                 videoRepository: VideoRepository,
+                                 clock: Clock,
                                  configuration: Configuration) extends AbstractController(cc) {
 
   val secret = configuration.get[String]("nnDouga.secret")
@@ -40,7 +44,18 @@ class VideosController @Inject()(cc: ControllerComponents,
                   val originalFilepath = FileSystems.getDefault.getPath(originalStoreDirPath, videoId)
                   Files.copy(file.ref.path, originalFilepath, StandardCopyOption.COPY_ATTRIBUTES)
                   Logger.debug(s"File posted : ${originalFilepath}")
-                  Future.successful(Ok("File stored."))
+                  Future.successful(Ok(s"File stored."))
+                  val now = LocalDateTime.now(clock)
+                  val video = Video(
+                    videoId,
+                    ct,
+                    userId,
+                    VideoStatus.OriginalFileSubmitted,
+                    now,
+                    now
+                  )
+                  val future = videoRepository.create(video)
+                  future.map(_ => Ok("Video stored."))
                 } else {
                   Future.successful(BadRequest("Api token expired."))
                 }
