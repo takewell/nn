@@ -2,3 +2,5 @@ node_modules
 docker-compose.yml
 mediaservser/logs
 mediaserver/filesystem
+webserver/public/javascripts/bundle.js
+webserver/public/javascripts/bundle.js.map
