@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const apiTokenGenerator = require('./apiTokenGenerator');
+const apiTokenGenerator = require('../lib/apiTokenGenerator');
 
 router.get('/', function (req, res, next) {
   let email = '';
