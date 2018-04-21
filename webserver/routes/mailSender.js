@@ -5,7 +5,7 @@ const mailgun = require('mailgun-js')({
   domain: config.MAILGUN_DOMAIN
 });
 
-const send = (email) => {
+function send(email) {
   const token = jwt.sign({ email: email }, config.SECRET);
   const url = config.WEBSERVER_URL_ROOT + 'signup/emailverify?token=' + token;
 

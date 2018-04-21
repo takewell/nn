@@ -13,11 +13,13 @@ export default class Uploader extends React.Component {
 
   componentDidMount() {
     Dropzone.options.videoUploadDropzone = {
-      paramName: 'file',
+      paramName: 'file', // The name that will be used to transfer the file
       maxFilesize: 3000, // MB
-      dictDefaultMessage: 'このエリアに動画ファイルをドラッグアンドドロップしてください<br> 3GB までの動画をアップロードできます。',
+      dictDefaultMessage:
+        'このエリアに動画ファイルをドラッグ＆ドロップしてください。<br> 3GBまでの動画をアップロードできます。',
       init: function () {
         let hasError = false;
+
         this.on('addedfile', (file) => {
           hasError = false;
           $('.dz-details').remove();
@@ -28,16 +30,22 @@ export default class Uploader extends React.Component {
         });
 
         this.on('complete', (file) => {
-          if (!hasError && this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+          if (
+            !hasError &&
+            this.getUploadingFiles().length === 0 &&
+            this.getQueuedFiles().length === 0
+          ) {
             setTimeout(() => {
               window.location.href = 'my/videos';
-            }, 300);
+            }, 300); // move after 300 msec.
           }
         });
 
         this.on('error', (file, response) => {
           hasError = true;
-          alert('アップロードに失敗しました。');
+          alert(
+            'アップロードに失敗しました。'
+          );
           console.error('Uploader Error:');
           console.error(file);
           console.error(response);
@@ -55,11 +63,11 @@ export default class Uploader extends React.Component {
   }
 
   render() {
-    const postUrl = this.props.mediaserverUrlRoot + 'v1/vedeos';
+    const postUrl = this.props.mediaserverUrlRoot + 'v1/videos';
     return (
-      <form className="dropzone" action={postUrl} method="POST" id="vedeoUploadDropzone" >
-        <input type="hidden" name="apiToken" value="{this.props.apiToken}" />
+      <form className="dropzone" action={postUrl} method="post" id="videoUploadDropzone">
+        <input type="hidden" name="apiToken" value={this.props.apiToken} />
       </form>
     );
   }
-};
+}
