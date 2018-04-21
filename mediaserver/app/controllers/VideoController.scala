@@ -68,7 +68,9 @@ class VideosController @Inject()(cc: ControllerComponents,
                     videoEncoder ! EncodeStartMessage(video)
                   }}
                   Future.successful(Ok(Json.toJson(Seq(video)))
-                    .as("application/json"))
+                    .as("application/json")
+                    .withHeaders("Access-Control-Allow-Origin" -> "*",
+                      "Access-Control-Allow-Headers" -> allowHeaders))
                 } else {
                   Future.successful(BadRequest("Api token expired."))
                 }
@@ -114,6 +116,7 @@ class VideosController @Inject()(cc: ControllerComponents,
                           val userId = (json \ "userId").validate[Long].get
                           val expire = (json \ "expire").validate[Long].get
 
+
                           if (System.currentTimeMillis() / 1000 <= expire) {
                             val filePath = FileSystems.getDefault.getPath(mpegdashStoreDirPath, fileName)
 
@@ -136,4 +139,30 @@ class VideosController @Inject()(cc: ControllerComponents,
                   }
       }
   }
+  
+      def optionsPost = Action.async { implicit request: Request[AnyContent] =>
+        Future.successful(Result(
+            header = ResponseHeader(200, Map(
+                "Access-Control-Allow-Origin" -> "*",
+                "Access-Control-Allow-Headers" -> allowHeaders,
+                "Access-Control-Allow-Methods" -> "POST, OPTIONS",
+                "Access-Control-Allow-Credentials" -> "true",
+                "Access-Control-Max-Age" -> "86400"
+                )),
+            body = HttpEntity.NoEntity
+            ))
+      }
+      def options(fileName: String) = Action.async { implicit request: Request[AnyContent] =>
+        Future.successful(Result(
+            header = ResponseHeader(200, Map(
+                "Access-Control-Allow-Origin" -> "*",
+                "Access-Control-Allow-Headers" -> allowHeaders,
+                "Access-Control-Allow-Methods" -> "GET, OPTIONS",
+                "Access-Control-Allow-Credentials" -> "true",
+                "Access-Control-Max-Age" -> "86400"
+              )),
+            body = HttpEntity.NoEntity
+            ))
+      }
+
 }

@@ -22,8 +22,21 @@
   <script src="http://cdn.dashjs.org/latest/dash.all.min.js"></script>
   <script>
     (function () {
-      var url = 'http://127.0.0.1:8000/filesystem/mpegdash/c61c960c-3942-4406-8fbc-ff287d2cf5ba.mpd';
+      var url = 'http://127.0.0.1:9000/v1/videos/c61c960c-3942-4406-8fbc-ff287d2cf5ba.mpd';
       var player = dashjs.MediaPlayer().create();
+      player.extend('RequestModifier', () => {
+        return {
+          modifyRequestHeader: xhr => {
+            xhr.setRequestHeader('Authorization', 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjIsImV4cGlyZSI6MTUyNDU2NTY3NSwiaWF0IjoxNTI0MzA2NDc1fQ.XRrgFuDu1KvSD_I2ClP4Ga0NGmQaI8XtpCuhI2d_npQ');
+            return xhr;
+          },
+          modifyRequestURL: url => {
+            return url;
+          }
+        };
+      },
+        true
+      );
       player.initialize(document.querySelector("#videoPlayer"), url, true);
     })();
   </script>
