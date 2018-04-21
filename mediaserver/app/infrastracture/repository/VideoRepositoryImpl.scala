@@ -44,4 +44,30 @@ class VideoRepositoryImpl extends VideoRepository {
     })
   }
 
+    /**
+      * 動画のプロパティを更新する
+    * ただし、タイトル、説明文などの更新は行わない
+    *
+    * @param video 保存する動画のプロパティ値
+    */
+      override def update(video: Video): Future[Unit] = {
+
+          Future.fromTry(Try {
+            using(DB(ConnectionPool.borrow())) { db =>
+                db.localTx { implicit session =>
+                    val sql =
+                        sql"""UPDATE videos SET
+                 | contentType = ${video.contentType},
+                 | videoStatus = ${video.status.value},
+                 | userId = ${video.userId},
+                 | createdAt = ${video.createdAt},
+                 | updatedAt = ${video.updatedAt}
+                 | WHERE videoId = ${video.videoId}
+              """.stripMargin
+                    sql.update().apply()
+                  }
+              }
+          })
+      }
+
 }

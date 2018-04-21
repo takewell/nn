@@ -12,6 +12,14 @@ trait VideoRepository {
     *
     * @param video 保存する動画のプロパティ値
     */
-  def create(video: Video): Future[Unit]
+    def create(video: Video): Future[Unit]
+
+    /**
+      * 動画のプロパティを更新する
+    * ただし、タイトル、説明文などの更新は行わない
+    * @param video
+    * @return
+    */
+    def update(video: Video): Future[Unit]
 
 }
