@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1 アップロード
+  #dropbox-container(
+    data-api-token= apiToken
+    data-mediaserver-url-root= config.MEDIASERVER_URL_ROOT
+  )

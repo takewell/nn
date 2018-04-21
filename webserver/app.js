@@ -34,6 +34,7 @@ const index = require('./routes/index');
 const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
+const upload = require('./routes/upload');
 
 const app = express();
 app.use(helmet());
@@ -82,6 +83,7 @@ app.use('/', index);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
+app.use('/upload', upload);
 
 app.post(
   '/login',

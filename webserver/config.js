@@ -2,6 +2,7 @@
 
 const config = {
   WEBSERVER_URL_ROOT: 'http://localhost:8000/',
+  MEDIASERVER_URL_ROOT: 'http://localhost:9000/',
   MYSQL_HOST: 'localhost',
   MYSQL_DB: 'nn_douga',
   MYSQL_USER: 'root',
