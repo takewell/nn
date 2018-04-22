@@ -1,22 +1,51 @@
 doctype html
-html
+html(lang="ja")
   head
-    title= title
+    meta(charset="UTF-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="ie=edge")
+    link(rel="stylesheet", href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css", integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb", crossorigin="anonymous")
     link(rel="stylesheet", href="/stylesheets/style.css")
+    title= title
   body
-    div
-      if user
-        h3= user.email
-        div
-          a(href="/my/videos") 自分の動画
-        div
-          a(href="/upload") 動画投稿
-        div
-          a(href="/logout") ログアウト
-      else
-        div
-          a(href="/login") ログイン
-        div
-          a(href="/signup") サインアップ
+    header
+      nav.navbar.navbar-expand-md.navbar-dark.fixed-top.bg-dark
+        a.navbar-brand(href="/") エヌエヌ動画
+        button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarCollapse", aria-controls="navbarCollapse", aria-expanded="false", aria-label="Toggle navigation")
+          span.navbar-toggler-icon
+        #navbarCollapse.collapse.navbar-collapse
+          ul.navbar-nav.mr-auto
+            if user
+              li.nav-item
+                a.nav-link(href="/my/videos") 自分の動画
+              li.nav-item
+                a.nav-link(href="/my/mylist") マイリスト
+              li.nav-item
+                a.nav-link(href="/upload") 動画投稿
+          ul.navbar-nav.mt-2.mt-md-0
+            if user
+              li.nav-item
+                - var settingTitle = user.email + "の設定"
+                a.nav-link(href="/settings")= settingTitle
+              li.nav-item
+                a.nav-link(href="/logout") ログアウト
+            else
+              li.nav-item
+                a.nav-link(href="/login") ログイン
+              li.nav-item
+                a.nav-link(href="/signup") サインアップ
     block content
     script(src="/javascripts/bundle.js")
+    nav.navbar.fixed-bottom.navbar-expand.navbar-dark.bg-dark
+      a.navbar-brand(href="/") エヌエヌ動画
+      button.navbar-toggler(type="button", data-toggle="collapse", data-target="#navbarCollapse", aria-controls="navbarCollapse", aria-expanded="false", aria-label="Toggle navigation")
+        span.navbar-toggler-icon
+      #navbarCollapse-bottom.collapse.navbar-collapse
+        ul.navbar-nav.mr-auto
+          if user
+            li.nav-item
+              a.nav-link(href="/my/videos") 自分の動画
+            li.nav-item
+              a.nav-link(href="/my/mylist") マイリスト
+            li.nav-item
+              a.nav-link(href="/upload") 動画投稿

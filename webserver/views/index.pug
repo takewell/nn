@@ -1,9 +1,11 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
-  if (user)
-    h3 API Token
-
-    p #{apiToken}
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1= title
+      p Welcome to #{title}
+      if (user)
+        h3 API Token
+        p #{apiToken}
+    .container.pb-5.mb-5

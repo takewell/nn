@@ -1,15 +1,20 @@
 extends ../layout
 
 block content
-  h1 サインアップ
-  if errorMessage
-    h2= errorMessage
-  form(action="/signup" method="POST")
-    h3 Eメールアドレス
-    input(type="text" name="email" placeholder="Eメールアドレス")
-    h3 パスワード
-    input(type="password" name="password" placeholder="パスワード")
-    h3 パスワードの再入力
-    input(type="password" name="repassword" placeholder="パスワード")
-    div
-      input(type="submit" name="submit" value="サインアップ")
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 サインアップ
+      if errorMessage
+        h2= errorMessage
+      form(action="/signup" method="POST")
+        .form-group
+          label(for="email") Eメールアドレス
+          input#email.form-control(type="text" name="email" placeholder="Eメールアドレス")
+        .form-group
+          label(for="password") パスワード
+          input#password.form-control(type="password" name="password" placeholder="パスワード")
+        .form-group
+          label(for="repassword") パスワードの再入力
+          input#repassword.form-control(type="password" name="repassword" placeholder="パスワード")
+        input.btn.btn-primary(type="submit" name="submit" value="サインアップ")
+    .container.pb-5.mb-5

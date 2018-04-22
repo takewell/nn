@@ -1,0 +1,55 @@
+extends ../../layout
+
+block content
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 投稿編集ページ
+      - var watchUrl = "/watch/" + video.videoId
+      h5
+        a(href= watchUrl) 視聴ページ
+      - var postUrl = "/my/videos/" + video.videoId
+      form(action=postUrl method="POST")
+        input(type="hidden" name="_csrf" value!=csrfToken)
+        .form-group
+          label(for="videoId") ID
+          input#videoId.form-control(type="text" value=video.videoId disabled)
+        .form-group
+          label(for="title") タイトル
+          input#title.form-control(type="text" name="title" value=video.title placeholder="タイトルを入力して下さい")
+        .form-group
+          label(for="description") 説明文
+          textarea.form-control(name="description" rows="3")=video.description
+          small#description.form-text.text-muted 説明文は視聴ページに表示される説明文です。
+        .form-group
+          label(for="videoStatus") 公開状態
+          - var isPublished = video.videoStatus === "Published"
+          if isPublished
+            .form-check
+              input#published.form-check-input(type="radio", name="videoStatus", value="Published", checked="")
+              label.form-check-label(for="published")
+                | 公開
+            .form-check
+              input#encoded.form-check-input(type="radio", name="videoStatus", value="Encoded")
+              label.form-check-label(for="encoded")
+                | 非公開
+          else
+            .form-check
+              input#published.form-check-input(type="radio", name="videoStatus", value="Published")
+              label.form-check-label(for="published")
+                | 公開
+            .form-check
+              input#encoded.form-check-input(type="radio", name="videoStatus", value="Encoded", checked="")
+              label.form-check-label(for="encoded")
+                | 非公開
+        .form-group
+          label(for="createdAt") 投稿日時
+          input#createdAt.form-control(type="text" value=formattedCreatedAt disabled)
+        .form-group
+          label(for="updatedAt") 編集日時
+          input#updatedAt.form-control(type="text" value=formattedUpdatedAt disabled)
+        input.btn.btn-primary(type="submit" name="submit" value="編集")
+      - var deleteUrl = "/my/videos/" + video.videoId + "/delete"
+      form.pt-5(action=deleteUrl method="POST")
+        input(type="hidden" name="_csrf" value!=csrfToken)
+        input.btn.btn-danger(type="submit" name="submit" value="投稿動画を削除する")
+    .container.pb-5.mb-5

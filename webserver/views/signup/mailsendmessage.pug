@@ -1,6 +1,9 @@
 extends ../layout
 
 block content
-  h1 #{email} にメールを送信しました
-  h3
-    a(href="/") ログインしたまま、トップページに移動する
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 #{email} にメールを送信しました
+      h3
+        a(href="/") ログインしたまま、トップページに移動する
+    .container.pb-5.mb-5

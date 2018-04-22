@@ -64,7 +64,7 @@ export default class Uploader extends React.Component {
   render() {
     const postUrl = this.props.mediaserverUrlRoot + 'v1/videos';
     return (
-      <form className="dropzone" action={postUrl} method="post" id="videoUploadDropzone">
+      <form className="dropzone jumbotron text-center" action={postUrl} method="post" id="videoUploadDropzone">
         <input type="hidden" name="apiToken" value={this.props.apiToken} />
       </form>
     );

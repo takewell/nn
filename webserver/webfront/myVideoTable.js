@@ -58,7 +58,7 @@ export default class MyVideoTable extends React.Component {
     });
 
     return (
-      <table>
+      <table className="table">
         <tbody>
           <tr>
             <th>ID</th>

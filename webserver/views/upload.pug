@@ -1,8 +1,11 @@
 extends layout
 
 block content
-  h1 アップロード
-  #dropbox-container(
-    data-api-token= apiToken
-    data-mediaserver-url-root= config.MEDIASERVER_URL_ROOT
-  )
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 アップロード
+      #dropbox-container(
+        data-api-token= apiToken
+        data-mediaserver-url-root= config.MEDIASERVER_URL_ROOT
+      )
+    .container.pb-5.mb-5
