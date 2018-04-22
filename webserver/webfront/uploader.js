@@ -1,6 +1,5 @@
 import Dropzone from 'dropzone';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Uploader

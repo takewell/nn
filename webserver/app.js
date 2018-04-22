@@ -35,6 +35,9 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
 const upload = require('./routes/upload');
+const myVideos = require('./routes/my/videos');
+
+const apiV1MyVideos = require('./routes/api/v1/my/videos');
 
 const app = express();
 app.use(helmet());
@@ -84,6 +87,8 @@ app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/upload', upload);
+app.use('/my/videos', myVideos);
+app.use('/v1/my', apiV1MyVideos);
 
 app.post(
   '/login',
