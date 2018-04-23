@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const moment = require('moment');
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 const apiTokenGenerator = require('../../lib/apiTokenGenerator');
@@ -23,7 +24,7 @@ router.get('/', authenticationEnsurer, (req, res, next) => {
 });
 
 router.get('/:videoId', authenticationEnsurer, csrfProtection, async (req, res, next) => {
-  const videoId = req.param.videoId;
+  const videoId = req.params.videoId;
   const video = await Video.findOne({
     where: {
       [Op.or]: [
@@ -31,7 +32,8 @@ router.get('/:videoId', authenticationEnsurer, csrfProtection, async (req, res, 
         { videoId: videoId, videoStatus: 'Encoded' }
       ]
     }
-  });
+  }).catch(e => console.error(e));
+  console.log(video);
   if (video && (req.user.isAdmin || video.userId === req.user.userId)) {
     let email = '';
     if (req.user) {
@@ -60,5 +62,54 @@ router.get('/:videoId', authenticationEnsurer, csrfProtection, async (req, res, 
   }
 });
 
+router.post('/:videoId', authenticationEnsurer, csrfProtection, async (req, res, next) => {
+  const videoId = req.params.videoId;
+  const title = req.body.title;
+  const description = req.body.description;
+  console.log(`${videoId}, ${title} , ${description}`);
+  const video = await Video.findOne({ where: { videoId: videoId, videoStatus: { [Op.ne]: 'Deleted' } } }).catch(e => console.error(e));
+  if (video && (req.user.isAdmin || video.userId === req.user.userId)) {
+    let videoStatus = null;
+    if (req.body.videoStatus === 'Published') {
+      videoStatus = 'Published';
+    } else {
+      videoStatus = 'Encoded';
+    }
+
+    await Video.update({
+      title: title.substring(0, 255),
+      description: description,
+      videoStatus: videoStatus
+    }, {
+        where: { videoId: video.videoId }
+      }).catch(e => console.error(e));
+
+    const array = await VideoStatistic.findOrCreate({
+      where: { videoId: videoId },
+      defaults: { videoId: videoId, playCount: 0, commentCount: 0, myListCount: 0 }
+    });
+    console.log(array);
+    res.redirect('/my/videos/' + videoId);
+  } else {
+    res.render('notfoundvideo', {
+      config: config,
+      user: req.user
+    });
+  }
+});
+
+router.post('/:videoId/delete', authenticationEnsurer, csrfProtection, async (req, res, next) => {
+  const videoId = req.params.videoId;
+  const video = await Video.findOne({ where: { videoId: videoId, videoStatus: { [Op.ne]: 'Deleted' } } });
+  if (video && (req.user.isAdmin || video.userId === req.user.userId)) {
+    await Video.update({ videoStatus: 'Deleted' }, { where: { videoId: video.videoId } });
+    res.redirect('/my/videos/');
+  } else {
+    res.render('notfoundvideo', {
+      config: config,
+      user: req.user
+    });
+  }
+});
 
 module.exports = router;
