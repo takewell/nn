@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h3= video.title
+      p(style="white-space: pre;")= video.description
+    .container.pb-2
+      .row.mb-0.pb-0
+        .col-md-2.pt-2.pb-2
+          h6.card-subtitle.mb-2.text-muted 投稿者
+          - var userNameDisplay = video.user.userName + " さん"
+          p.card-text= userNameDisplay
+        .col-md-2.pt-2.pb-2
+          h6.card-subtitle.mb-2.text-muted 投稿日時
+          p.card-text= formattedCreatedAt
+        .col-md-8.pt-2.pb-2.bg-secondary
+    - var videoPlayerId = "video-player-" + video.videoId
+    - var mpdUrl = config.MEDIASERVER_URL_ROOT + "v1/videos/" + video.videoId + ".mpd"
+    .container
+      .row
+        .col-12.col-md-8.m-0.p-0.text-center
+          #video-containar(
+            data-width = 640
+            data-height = 360
+            data-video-player-id = videoPlayerId
+            data-mpd-url = mpdUrl
+            data-api-token= apiToken
+            autoplay= true
+            )
+        .col-12.col-md-4.m-0.p-0.bg-secondary
+    .container.pb-5.mb-5

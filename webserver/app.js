@@ -35,6 +35,7 @@ const login = require('./routes/login');
 const logout = require('./routes/logout');
 const signup = require('./routes/signup');
 const upload = require('./routes/upload');
+const watch = require('./routes/watch');
 const myVideos = require('./routes/my/videos');
 const settings = require('./routes/settings');
 
@@ -88,6 +89,7 @@ app.use('/login', login);
 app.use('/logout', logout);
 app.use('/signup', signup);
 app.use('/upload', upload);
+app.use('/watch', watch);
 app.use('/settings', settings);
 app.use('/my/videos', myVideos);
 app.use('/v1/my', apiV1MyVideos);
