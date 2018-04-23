@@ -1,0 +1,26 @@
+extends ./layout
+
+block content
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 ユーザー設定
+      form(action="/settings" method="POST")
+        input(type="hidden" name="_csrf" value!=csrfToken)
+        .form-group
+          label(for="userId") ユーザーID
+          input#userId.form-control(type="text" value=user.userId disabled)
+        .form-group
+          label(for="email") Eメールアドレス
+          input#email.form-control(type="text" value=user.email disabled)
+        .form-group
+          label(for="userName") ユーザー名
+          input#userName.form-control(type="text" name="userName" placeholder="ユーザー名を入力して下さい" value=user.userName)
+          small#userName.form-text.text-muted ユーザー名を設定すると投稿者として表示されます
+        .form-group
+          label(for="createdAt") 作成日時
+          input#createdAt.form-control(type="text" value=formattedCreatedAt disabled)
+        .form-group
+          label(for="updatedAt") 更新日時
+          input#updatedAt.form-control(type="text" value=formattedUpdatedAt disabled)
+        input.btn.btn-primary(type="submit" name="submit" value="編集")
+    .container.pb-5.mb-5
