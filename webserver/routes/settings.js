@@ -13,8 +13,8 @@ router.get('/', authenticationEnsurer, csrfProtection, async (req, res, next) =>
   if (req.user) {
     email = req.user.email;
   }
-  const where = { where: { userId: req.user.userId } };
-  const user = await User.findOne(where);
+  const where = { userId: req.user.userId };
+  const user = await User.findOne({ where: where });
   const formattedCreateAt = moment(user.createdAt).format('YYYY/MM/DD HH:mm');
   const formattedUpdatedAt = moment(user.updatedAt).format('YYYY/MM/DD HH:mm');
 
@@ -30,9 +30,9 @@ router.get('/', authenticationEnsurer, csrfProtection, async (req, res, next) =>
 
 router.post('/', authenticationEnsurer, csrfProtection, async (req, res, next) => {
   const userName = req.body.userName;
-  const where = { where: { userId: req.user.userId } };
-  const user = await User.findOne(where);
-  await User.update({ userName: userName.substring(0, 255) }, where);
+  const where = { userId: req.user.userId };
+  const user = await User.findOne({ where: where });
+  await User.update({ userName: userName.substring(0, 255) }, { where: where });
   res.redirect('/settings');
 });
 
