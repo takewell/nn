@@ -39,12 +39,8 @@ router.get('/:videoId', authenticationEnsurer, csrfProtection, async (req, res, 
     if (req.user) {
       email = req.user.email;
     }
-    const formattedCreatedAt = moment(video.createdAt).format(
-      'YYYY/MM/DD HH:mm'
-    );
-    const formattedUpdatedAt = moment(video.updatedAt).format(
-      'YYYY/MM/DD HH:mm'
-    );
+    const formattedCreatedAt = moment(video.createdAt).format('YYYY/MM/DD HH:mm');
+    const formattedUpdatedAt = moment(video.updatedAt).format('YYYY/MM/DD HH:mm');
     res.render('my/videos/edit', {
       email: email,
       config: config,
