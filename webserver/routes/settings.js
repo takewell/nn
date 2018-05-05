@@ -8,6 +8,8 @@ const User = require('../models/user');
 const csrf = require('csurf');
 const csrfProtection = csrf({ cookie: true });
 
+module.exports = router;
+
 router.get('/', authenticationEnsurer, csrfProtection, async (req, res, next) => {
   let email = '';
   if (req.user) {
@@ -35,5 +37,3 @@ router.post('/', authenticationEnsurer, csrfProtection, async (req, res, next) =
   await User.update({ userName: userName.substring(0, 255) }, { where: where });
   res.redirect('/settings');
 });
-
-module.exports = router;

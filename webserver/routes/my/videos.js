@@ -12,7 +12,6 @@ const loader = require('../../models/sequelizeLoader');
 const Sequelize = loader.Sequelize;
 const Op = Sequelize.Op;
 
-
 router.get('/', authenticationEnsurer, (req, res, next) => {
   let email = '', apiToken = '';
   if (req.user) {
