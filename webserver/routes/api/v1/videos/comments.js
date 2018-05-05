@@ -6,6 +6,24 @@ const config = require('../../../../config');
 const Comment = require('../../../../models/comment');
 const VideoStatistic = require('../../../../models/videostatistic');
 
+module.exports = router;
+
+router.get('/:videoId/comments', apiTokenEnsurer, async (req, res, next) => {
+  const decoderApiToken = apiTokenDecoder(req);
+  if (decoderApiToken) {
+    const videoId = req.params.videoId;
+    try {
+      const comments = await Comment.findAll({ where: { videoId: videoId }, order: [['videoPosition', 'ASC']] });
+      res.json(comments);
+    } catch (e) {
+      console.error(e);
+      res.json({ status: 'NG', message: 'Database error.' });
+    }
+  } else {
+    res.json({ status: 'NG', message: 'API token not corrent.' });
+  }
+});
+
 router.post('/:videoId/comments', apiTokenEnsurer, async (req, res, next) => {
   console.log('hogehogehogeohgeohgeo');
   const decoderApiToken = apiTokenDecoder(req);
@@ -26,5 +44,3 @@ router.post('/:videoId/comments', apiTokenEnsurer, async (req, res, next) => {
     res.json({ status: 'NG', message: 'Api token not corrent' });
   }
 });
-
-module.exports = router;
