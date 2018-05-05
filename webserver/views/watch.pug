@@ -28,5 +28,21 @@ block content
             data-api-token= apiToken
             autoplay= true
             )
-        .col-12.col-md-4.m-0.p-0.bg-secondary
+          #comment-poster(
+            data-video-id = video.videoId
+            data-video-player-id = videoPlayerId
+            data-api-token = apiToken
+          )
+        .col-12.col-md-4.m-0.p-0
+          #comment-table(
+            data-video-id = video.videoId
+            data-video-player-id = videoPlayerId
+            data-api-token= apiToken
+          )
+            thead.comment-table
+              tr
+                th.th-cm(scope="col") コメント
+                th.th-pt(scope="col") 再生時間
+                th.th-ud(scope="col") カキコミ時刻
+            tbody.comment-table
     .container.pb-5.mb-5

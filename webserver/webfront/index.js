@@ -5,6 +5,8 @@ import ReactDOM from 'react-dom';
 import Uploader from './uploader.js';
 import MyVideoTable from './myVideoTable.js';
 import VideoPlayer from './videoPlayer.js';
+import CommentPoster from './commentPoster';
+import CommentTable from './commentTable.js';
 
 const uploaderDivided = document.getElementById('dropbox-container');
 if (uploaderDivided) {
@@ -39,3 +41,39 @@ if (videoContainerDivided) {
     videoContainerDivided
   );
 }
+
+/** 
+ * コメントの追加が行われたときに通知するリスナーリスト
+ * @param {array} comments
+ * @param {string} eventName
+ */
+const commentListenerContainer = {
+  listeners: []
+};
+
+const commentPosterDivided = document.getElementById('comment-poster');
+if (commentPosterDivided) {
+  ReactDOM.render(
+    <CommentPoster
+      videoId={commentPosterDivided.dataset.videoId}
+      videoPlayerId={commentPosterDivided.dataset.videoPlayerId}
+      apiToken={commentPosterDivided.dataset.apiToken}
+      commentListenerContainer={commentListenerContainer}
+    />,
+    commentPosterDivided
+  );
+}
+
+const commentTableDivided = document.getElementById('comment-table');
+if (commentTableDivided) {
+  ReactDOM.render(
+    <CommentTable
+      videoId={commentTableDivided.dataset.videoId}
+      videoPlayerId={commentTableDivided.dataset.videoPlayerId}
+      apiToken={commentTableDivided.dataset.apiToken}
+      commentListenerContainer={commentListenerContainer}
+    />,
+    commentTableDivided
+  );
+}
+

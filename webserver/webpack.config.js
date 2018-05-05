@@ -2,8 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
-  mode: 'production',
-  entry: './webfront/index.js',
+  // mode: 'production',
+  mode:'development',
+  entry: ['babel-polyfill', './webfront/index.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, './public/javascripts')

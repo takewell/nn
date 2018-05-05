@@ -4,3 +4,65 @@
   width: 100%;
   height: 400px;
 }
+
+/* CommentTable */
+thead.comment-table,
+ tbody.comment-table,
+  tr.ct,
+   td.ct,
+    th.ct { display: block; }
+
+tr.ct:after {
+  content: '';
+  display: block;
+  visibility: hidden;
+  clear: both;
+}
+
+tbody.comment-table {
+  width: 320px;
+  height: 370px;
+  overflow-y: auto;
+}
+
+thead.comment-table {
+  /* fallback */
+}
+
+tbody.comment-table tr.ct td.ct, thead.comment-table tr.ct th.ct {
+  float: left;
+}
+
+.th-cm {
+  width: 44%;
+  word-wrap: break-word;
+}
+
+.th-pt {
+  width: 24%;
+  word-wrap: break-word;
+}
+
+.th-ud {
+  width: 32%;
+  word-wrap: break-word;
+}
+
+.td-cm {
+  width: 48%;
+  word-wrap: break-word;
+}
+
+.td-pt {
+  width: 18%;
+  word-wrap: break-word;
+}
+
+.td-ud {
+  width: 34%;
+  word-wrap: break-word;
+}
+
+.recent-text {
+  font-size: 7pt
+}
