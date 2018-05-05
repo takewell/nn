@@ -12,23 +12,24 @@ const LocalStrategy = require('passport-local').Strategy;
 const config = require('./config');
 const strategy = require('./lib/strategy');
 
+// Models
 const User = require('./models/user');
 const Video = require('./models/video');
 const Comment = require('./models/comment');
 const Mylistitem = require('./models/mylistitem');
 const VideoStatistic = require('./models/videostatistic');
 
-User.sync().then(() => {
+(async () => {
+  await User.sync();
   Video.belongsTo(User, { foreignKey: 'userId' });
-  Video.sync().then(() => {
-    Comment.belongsTo(Video, { foreignKey: 'videoId' });
-    Comment.sync();
-    Video.belongsTo(VideoStatistic, { foreignKey: 'videoId' });
-    VideoStatistic.sync();
-  });
   Mylistitem.belongsTo(User, { foreignKey: 'userId' });
-  Mylistitem.sync();
-});
+  await Video.sync();
+  Comment.belongsTo(Video, { foreignKey: 'videoId' });
+  await VideoStatistic.sync();
+  Video.belongsTo(VideoStatistic, { foreignKey: 'videoId' });
+  await Comment.sync();
+  await Mylistitem.sync();
+})();
 
 const index = require('./routes/index');
 const login = require('./routes/login');
