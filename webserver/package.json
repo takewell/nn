@@ -9,6 +9,7 @@
     "watch": "./node_modules/.bin/webpack --progress --watch --config webpack.config.js"
   },
   "dependencies": {
+    "babel-polyfill": "^6.26.0",
     "bcrypt": "^1.0.3",
     "body-parser": "~1.17.1",
     "bootstrap": "^4.1.0",
