@@ -8,8 +8,12 @@ export default class CommentRenderer {
     this.commentListenerContainer = commentListenerContainer;
     this.videoPlayerId = videoPlayerId;
     this.comments = [];
+    this.objSet = new Set();
+
     this.fontSize = 24;
     this.controllerHeight = 30;
+    this.showRangeCentiSeconds = 100; // 現在の時間から表示させるセンチ秒
+
     this.textStyle = new PIXI.TextStyle({
       fontFamily: 'Arial',
       fontSize: this.fontSize,
@@ -37,6 +41,8 @@ export default class CommentRenderer {
         });
       }
 
+      // console.info(this.comments);
+      this.addText(this.fetchRenderedComment());
     });
   }
 
@@ -51,9 +57,57 @@ export default class CommentRenderer {
     videoContainer.appendChild(this.app.view);
     this.app.view.style = 'position: absolute; top: 0px; left: 0px;';
 
-    const text = new PIXI.Text('コメント描画のテスト', this.textStyle);
-    text.x = 0;
-    text.y = 0;
-    this.app.stage.addChild(text);
+    this.app.ticker.add(() => {
+      const renderedComments = this.fetchRenderedComment();
+      this.addText(renderedComments);
+      Array.from(this.objSet).forEach(this.updatePosition.bind(this));
+    });
   }
+
+  fetchRenderedComment() {
+    const renderedComments = [];
+    for (let i = 0; i < this.comments.length; i++) {
+      const comment = this.comments[i];
+      const currentTime = this.videoPlayer.currentTime * 100;
+      const vpos = comment.videoPosition;
+
+      if (!comment.isFetched) {
+        const isInShowRange =
+          currentTime - this.showRangeCentiSeconds <= vpos &&
+          vpos < currentTime;
+        if (isInShowRange) {
+          comment.isFetched = true; // 一度追加したものかはマーク
+          renderedComments.push(comment);
+        }
+      }
+
+      if (currentTime <= vpos) break;
+    }
+
+    return renderedComments;
+  }
+
+  addText(renderedComments) {
+    renderedComments.forEach(comment => {
+      const text = new PIXI.Text(comment.content, this.textStyle);
+      this.objSet.add(text);
+      const cWidth = this.videoPlayer.clientWidth;
+
+      text.y = 0;
+      text.x = cWidth;
+      this.app.stage.addChild(text);
+    });
+  }
+
+  updatePosition(obj) {
+    const moveDiff = -3;
+    obj.x += moveDiff; // 左少し移動
+
+    if (obj.x < -obj.width) {
+      // テキストが左側で消えたらTextを消滅させる
+      obj.destroy();
+      this.objSet.delete(obj);
+    }
+  }
+
 }
