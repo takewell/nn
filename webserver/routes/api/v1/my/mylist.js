@@ -20,7 +20,6 @@ router.get('/', apiTokenEnsurer, async (req, res, next) => {
     try {
       const mylistitem = await Mylistitem.findAll({ where: { userId: decodedApiToken.userId }, order: [['createdAt', 'DESC']] });
       const videoIds = mylistitem.map(i => i.videoId);
-      console.log('VIDEOIDS ' + videoIds);
       const videos = await Video.findAll({ where: { videoId: { [Op.in]: videoIds } }, order: [['createdAt', 'DESC']] });
       res.json(videos);
     } catch (e) {
