@@ -8,6 +8,8 @@ import VideoPlayer from './videoPlayer.js';
 import CommentPoster from './commentPoster';
 import CommentTable from './commentTable.js';
 import CommentRenderer from './commentRenderer';
+import MylistButton from './mylistButton.js';
+import MylistTable from './mylistTable.js';
 
 const uploaderDivided = document.getElementById('dropbox-container');
 if (uploaderDivided) {
@@ -84,4 +86,23 @@ if (videoContainerDivided) {
     videoContainerDivided.dataset.videoPlayerId
   );
   window.CommentRenderer.init();
+}
+
+const mylistButtonDivided = document.getElementById('mylist-button-container');
+if (mylistButtonDivided) {
+  ReactDOM.render(
+    <MylistButton
+      videoId={mylistButtonDivided.dataset.videoId}
+      apiToken={mylistButtonDivided.dataset.apiToken}
+    />,
+    mylistButtonDivided
+  );
+}
+
+const mylistTableDevided = document.getElementById('mylist-table');
+if (mylistTableDevided) {
+  ReactDOM.render(
+    <MylistTable apiToken={mylistTableDevided.dataset.apiToken} />,
+    mylistTableDevided
+  );
 }

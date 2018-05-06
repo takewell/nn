@@ -1,0 +1,10 @@
+extends ../layout
+
+block content
+  main(role="main")
+    .container.mt-4.mb-2.pt-5.pb-0
+      h1 マイリスト一覧
+      #mylist-table(
+        data-api-token= apiToken
+        )
+    .container.pb-5.mb-5
