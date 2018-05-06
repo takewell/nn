@@ -1,7 +1,11 @@
 const loader = require('./sequelizeLoader');
 const Sequelize = loader.Sequelize;
 
-const Mylistitem = loader.database.define(
+/**
+ * @namespace Mylistitem
+ */
+
+module.exports = loader.database.define(
   'mylistitems',
   {
     mylistitemId: {
@@ -34,5 +38,3 @@ const Mylistitem = loader.database.define(
     ]
   }
 );
-
-module.exports = Mylistitem;

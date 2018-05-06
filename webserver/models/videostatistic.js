@@ -1,7 +1,7 @@
 const loader = require('./sequelizeLoader');
 const Sequelize = loader.Sequelize;
 
-const VideoStatistic = loader.database.define(
+module.exports = loader.database.define(
   'videostatistics',
   {
     videoId: {
@@ -30,5 +30,3 @@ const VideoStatistic = loader.database.define(
     timestamps: true
   }
 );
-
-module.exports = VideoStatistic;

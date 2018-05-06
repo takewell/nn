@@ -41,6 +41,7 @@ const myVideos = require('./routes/my/videos');
 const settings = require('./routes/settings');
 // API
 const apiV1MyVideos = require('./routes/api/v1/my/videos');
+const apiV1MyMylist = require('./routes/api/v1/my/mylist');
 const apiV1VideosComments = require('./routes/api/v1/videos/comments');
 
 const app = express();
@@ -95,6 +96,7 @@ app.use('/watch', watch);
 app.use('/settings', settings);
 app.use('/my/videos', myVideos);
 app.use('/v1/my', apiV1MyVideos);
+app.use('/v1/my/mylist', apiV1MyMylist);
 app.use('/v1/videos', apiV1VideosComments);
 
 app.post(
