@@ -28,11 +28,18 @@ export default class CommentTabel extends React.Component {
   }
 
   async updateComments() {
+    const selfListener = this.commnetListener;
+    const listenerContainer = this.props.commentListenerContainer;
+
     try {
       const res = await fetch(`/v1/videos/${this.props.videoId}/comments`, {
         headers: { Authorization: `Bearer ${this.props.apiToken}` }
       });
       const json = await res.json();
+      listenerContainer.listeners.forEach((listener) => {
+        if (listener === selfListener) return;
+        listener(json, 'fetchcomments');
+      });
       this.setState({ comments: json });
     } catch (e) {
       console.error(e);

@@ -7,6 +7,7 @@ export default class CommentRenderer {
   constructor(commentListenerContainer, videoPlayerId) {
     this.commentListenerContainer = commentListenerContainer;
     this.videoPlayerId = videoPlayerId;
+    this.comments = [];
     this.fontSize = 24;
     this.controllerHeight = 30;
     this.textStyle = new PIXI.TextStyle({
@@ -24,6 +25,18 @@ export default class CommentRenderer {
       dropShadowDistance: 2,
       wordWrap: false,
       wordWrapWidth: 100
+    });
+
+    this.commentListenerContainer.listeners.push((comments, eventName) => {
+      this.comments = this.comments.concat(comments);
+
+      if (eventName === 'commentpost') {
+        // コメント投稿後はソートし直して、レンダリングに足す
+        this.comments = this.comments.sort((a, b) => {
+          return a.videoPosition - b.videoPosition;
+        });
+      }
+
     });
   }
 
