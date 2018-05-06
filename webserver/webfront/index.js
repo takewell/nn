@@ -7,6 +7,7 @@ import MyVideoTable from './myVideoTable.js';
 import VideoPlayer from './videoPlayer.js';
 import CommentPoster from './commentPoster';
 import CommentTable from './commentTable.js';
+import CommentRenderer from './commentRenderer';
 
 const uploaderDivided = document.getElementById('dropbox-container');
 if (uploaderDivided) {
@@ -77,3 +78,10 @@ if (commentTableDivided) {
   );
 }
 
+if (videoContainerDivided) {
+  window.CommentRenderer = new CommentRenderer(
+    commentListenerContainer,
+    videoContainerDivided.dataset.videoPlayerId
+  );
+  window.CommentRenderer.init();
+}
