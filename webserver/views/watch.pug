@@ -14,7 +14,12 @@ block content
         .col-md-2.pt-2.pb-2
           h6.card-subtitle.mb-2.text-muted 投稿日時
           p.card-text= formattedCreatedAt
-        .col-md-8.pt-2.pb-2.bg-secondary
+        .col-md-6.pt-2.pb-2.bg-secondary
+        .col-md-2.pt-2.pb-2
+          #mylist-button-container(
+            data-video-id = video.videoId
+            data-api-token= apiToken
+          )
     - var videoPlayerId = "video-player-" + video.videoId
     - var mpdUrl = config.MEDIASERVER_URL_ROOT + "v1/videos/" + video.videoId + ".mpd"
     .container

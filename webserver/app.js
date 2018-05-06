@@ -39,6 +39,7 @@ const upload = require('./routes/upload');
 const watch = require('./routes/watch');
 const myVideos = require('./routes/my/videos');
 const settings = require('./routes/settings');
+const myMylist = require('./routes/my/mylist');
 // API
 const apiV1MyVideos = require('./routes/api/v1/my/videos');
 const apiV1MyMylist = require('./routes/api/v1/my/mylist');
@@ -95,6 +96,7 @@ app.use('/upload', upload);
 app.use('/watch', watch);
 app.use('/settings', settings);
 app.use('/my/videos', myVideos);
+app.use('/my/mylist', myMylist);
 app.use('/v1/my', apiV1MyVideos);
 app.use('/v1/my/mylist', apiV1MyMylist);
 app.use('/v1/videos', apiV1VideosComments);
