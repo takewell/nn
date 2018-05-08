@@ -44,6 +44,7 @@ const myMylist = require('./routes/my/mylist');
 const apiV1MyVideos = require('./routes/api/v1/my/videos');
 const apiV1MyMylist = require('./routes/api/v1/my/mylist');
 const apiV1VideosComments = require('./routes/api/v1/videos/comments');
+const apiV1VideosStatistics = require('./routes/api/v1/videos/videostatistics');
 
 const app = express();
 app.use(helmet());
@@ -100,6 +101,7 @@ app.use('/my/mylist', myMylist);
 app.use('/v1/my', apiV1MyVideos);
 app.use('/v1/my/mylist', apiV1MyMylist);
 app.use('/v1/videos', apiV1VideosComments);
+app.use('/v1/videos', apiV1VideosStatistics);
 
 app.post(
   '/login',

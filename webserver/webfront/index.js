@@ -10,6 +10,7 @@ import CommentTable from './commentTable.js';
 import CommentRenderer from './commentRenderer';
 import MylistButton from './mylistButton.js';
 import MylistTable from './mylistTable.js';
+import VideoStatisticsArea from './videoStatisticsArea.js';
 
 const uploaderDivided = document.getElementById('dropbox-container');
 if (uploaderDivided) {
@@ -104,5 +105,18 @@ if (mylistTableDevided) {
   ReactDOM.render(
     <MylistTable apiToken={mylistTableDevided.dataset.apiToken} />,
     mylistTableDevided
+  );
+}
+
+const videoStatContainerDivided = document.getElementById(
+  'video-stat-container'
+);
+if (videoStatContainerDivided) {
+  ReactDOM.render(
+    <VideoStatisticsArea
+      videoId={mylistButtonDivided.dataset.videoId}
+      apiToken={videoStatContainerDivided.dataset.apiToken}
+    />,
+    videoStatContainerDivided
   );
 }
