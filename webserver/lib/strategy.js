@@ -3,7 +3,7 @@ const User = require('../models/user');
 // const config = require('../config');
 const passwordDigestClient = require('./passwordDigestClient');
 
-const getLocalStrategy = () => {
+module.exports.getLocalStrategy = () => {
   return new LocalStrategy(
     { usernameField: 'email', passwordField: 'password' },
     async (email, password, done) => {
@@ -22,18 +22,14 @@ const getLocalStrategy = () => {
   );
 };
 
-const getFacebookStrategy = () => {
+module.exports.getFacebookStrategy = () => {
   return {};
 };
 
-const getTwitterStrategy = () => {
+module.exports.getTwitterStrategy = () => {
   return {};
 };
 
-const getGoogleStrategy = () => {
+module.exports.getGoogleStrategy = () => {
   return {};
-};
-
-module.exports = {
-  getLocalStrategy: getLocalStrategy
 };
