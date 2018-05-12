@@ -12,13 +12,16 @@ const LocalStrategy = require('passport-local').Strategy;
 const config = require('./config');
 const strategy = require('./lib/strategy');
 
-// Models
+/**
+ * Models
+ */
 const User = require('./models/user');
 const Video = require('./models/video');
 const Comment = require('./models/comment');
 const Mylistitem = require('./models/mylistitem');
 const VideoStatistic = require('./models/videostatistic');
 
+// create databases
 (async () => {
   await User.sync();
   Video.belongsTo(User, { foreignKey: 'userId' });
@@ -31,22 +34,9 @@ const VideoStatistic = require('./models/videostatistic');
   await Mylistitem.sync();
 })();
 
-const index = require('./routes/index');
-const login = require('./routes/login');
-const logout = require('./routes/logout');
-const signup = require('./routes/signup');
-const upload = require('./routes/upload');
-const watch = require('./routes/watch');
-const myVideos = require('./routes/my/videos');
-const settings = require('./routes/settings');
-const myMylist = require('./routes/my/mylist');
-// API
-const apiV1MyVideos = require('./routes/api/v1/my/videos');
-const apiV1MyMylist = require('./routes/api/v1/my/mylist');
-const apiV1VideosComments = require('./routes/api/v1/videos/comments');
-const apiV1VideosStatistics = require('./routes/api/v1/videos/videostatistics');
-
 const app = express();
+module.exports = app;
+
 app.use(helmet());
 
 passport.use(strategy.getLocalStrategy());
@@ -89,38 +79,48 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+/**
+ * Routing
+ */
+const index = require('./routes/index');
 app.use('/', index);
+const login = require('./routes/login');
 app.use('/login', login);
+const logout = require('./routes/logout');
 app.use('/logout', logout);
+const signup = require('./routes/signup');
 app.use('/signup', signup);
+const upload = require('./routes/upload');
 app.use('/upload', upload);
+const watch = require('./routes/watch');
 app.use('/watch', watch);
-app.use('/settings', settings);
+const myVideos = require('./routes/my/videos');
 app.use('/my/videos', myVideos);
+const settings = require('./routes/settings');
+app.use('/settings', settings);
+const myMylist = require('./routes/my/mylist');
 app.use('/my/mylist', myMylist);
+// api
+const apiV1Videos = require('./routes/api/v1/videos');
+app.use('/v1/videos', apiV1Videos);
+const apiV1MyVideos = require('./routes/api/v1/my/videos');
 app.use('/v1/my', apiV1MyVideos);
+const apiV1MyMylist = require('./routes/api/v1/my/mylist');
 app.use('/v1/my/mylist', apiV1MyMylist);
+const apiV1VideosComments = require('./routes/api/v1/videos/comments');
 app.use('/v1/videos', apiV1VideosComments);
+const apiV1VideosStatistics = require('./routes/api/v1/videos/videostatistics');
 app.use('/v1/videos', apiV1VideosStatistics);
 
-app.post(
-  '/login',
-  passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: false
-  })
-);
-
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
 
 // error handler
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -129,5 +129,3 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
-
-module.exports = app;
