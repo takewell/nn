@@ -3,9 +3,18 @@ extends layout
 block content
   main(role="main")
     .container.mt-4.mb-2.pt-5.pb-0
-      h1= title
-      p Welcome to #{title}
-      if (user)
-        h3 API Token
-        p #{apiToken}
+      .jumbotron.jumbotron-fluid
+        .container
+          h1.display-4 エヌエヌ動画
+          p.lead
+            | エヌエヌ動画は、小さい組織で利用できるログイン必須のニコニコ動画クローンです。
+            br
+            | 動画視聴とコメント機能はログインしているユーザーのみが利用できます。
+    if user
+      .container.pt-0
+        h1 最近の投稿動画一覧
+        #recent-video-container(
+          data-api-token= apiToken
+          data-mediaserver-url-root= config.MEDIASERVER_URL_ROOT
+        )
     .container.pb-5.mb-5
